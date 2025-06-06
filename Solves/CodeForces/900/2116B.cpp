@@ -1,4 +1,4 @@
-// ! Concept: Number Theory
+// ! Concept: Number Theory, Binary Exponentiation.
 
 #include <bits/stdc++.h>
 #define MOD 998244353
