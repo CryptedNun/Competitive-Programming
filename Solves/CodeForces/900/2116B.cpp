@@ -34,23 +34,16 @@ int main() {
                 if(p2[i] > p2[maxIndex2]) maxIndex2 = i;
             }
 
+            long long a = p1[maxIndex1], b = p2[maxIndex2];
+            int v1 = p2[i - maxIndex1];
+            int v2 = p1[i - maxIndex2];
+
             long long res;
-            if (p1[maxIndex1] != p2[maxIndex2]) {
-                if (p1[maxIndex1] > p2[maxIndex2]) {
-                    int idx = i - maxIndex1;
-                    int val = (idx >= 0) ? p2[idx] : 0;
-                    res = modbinpow(p1[maxIndex1]) + modbinpow(val);
-                } else {
-                    int idx = i - maxIndex2;
-                    int val = (idx >= 0) ? p1[idx] : 0;
-                    res = modbinpow(p2[maxIndex2]) + modbinpow(val);
-                }
+            if (a != b) {
+                if (a > b) res = modbinpow(a) + modbinpow(v1);
+                else res = modbinpow(b) + modbinpow(v2);
             } else {
-                int idx1 = i - maxIndex1;
-                int idx2 = i - maxIndex2;
-                int val1 = (idx1 >= 0) ? p2[idx1] : 0;
-                int val2 = (idx2 >= 0) ? p1[idx2] : 0;
-                res = modbinpow(p1[maxIndex1]) + modbinpow(max(val1, val2));
+                res = modbinpow(a) + modbinpow(max(v1, v2));
             }
 
             r[i] = res % MOD;
