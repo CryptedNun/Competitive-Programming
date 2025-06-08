@@ -18,6 +18,7 @@ int main() {
         // * Trailing Digits: Use binary exponentiation modulo
         long long trailing3Digits = binexpmod(m, n);
 
+        // * One Subtle Detail: Fill the trailing 3 digits with leading zeros, if the modulo is less than 100 
         cout << leading3Digits << "...";
         cout << setw(3) << setfill('0') << trailing3Digits << '\n';
     }
