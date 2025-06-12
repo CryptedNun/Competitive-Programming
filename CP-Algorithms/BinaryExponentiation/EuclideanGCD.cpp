@@ -19,3 +19,4 @@ int main() {
     cout<<gcd(m, n);
 }
 
+// ! lcm(a,b) * gcd(a,b) = a*b;
