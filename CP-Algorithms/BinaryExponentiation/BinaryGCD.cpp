@@ -1,4 +1,5 @@
-// ! This isn't necessary to learn if you are a beginner. Don't sweat it. This function is already built-in in C++17 onwards.
+// ! This isn't necessary to learn if you are a beginner. Don't sweat it. 
+// ! This function is already built-in in C++17 onwards. In <numeric>, gcd().
 #include <bits/stdc++.h>
 using namespace std;
 
