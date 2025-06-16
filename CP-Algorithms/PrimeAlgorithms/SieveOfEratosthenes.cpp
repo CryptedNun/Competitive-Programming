@@ -30,7 +30,8 @@ vector<bool> sieve(long long n) {
 //     for (long long i = 3; i <= n; i += 2) {
 //         if (is_prime[i]) {
 //             primes.push_back(i);
-            
+//
+//             // * Mark odd multiples of i as non-prime
 //             if (i * i <= n) {
 //                 for (long long j = i * i; j <= n; j += 2 * i)
 //                     is_prime[j] = false;
