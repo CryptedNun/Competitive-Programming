@@ -10,8 +10,7 @@ vector<long long> trial_division1(long long n) {
             n /= d;
         }
     }
-    if (n > 1)
-        factorization.push_back(n);
+    if (n > 1) factorization.push_back(n);
     return factorization;
 }
 
