@@ -33,7 +33,7 @@ vector<long long> sieveRange(long long l, long long h) {
     vector<bool> range(h-l+1, true);
 
     for (long long p : primes_h) {
-        long long start = max(p * p, ((l + p - 1) / p) * p);
+        long long start = max(p * p, ((l + p - 1) / p) * p);  // (l + p - 1) / p) gives the ceil(l/p).
         for (long long j = start; j <= h; j += p) {
             range[j - l] = false;
         }
