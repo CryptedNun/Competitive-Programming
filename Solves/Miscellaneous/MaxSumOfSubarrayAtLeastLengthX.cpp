@@ -1,3 +1,4 @@
+// TODO : https://cp-algorithms.com/num_methods/binary_search.html#binary-search-on-the-answer
 //? We are given an array of length n.
 //? We are to find the maximum possible floored average acquired from a subarray of length at least x
 
