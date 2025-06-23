@@ -25,7 +25,7 @@ bool satisfy(double t, double v_max, double T,
 
     double ship_v2 = ship_vx * ship_vx + ship_vy * ship_vy;
 
-    return ship_v2 <= v_max * v_max; // Add epsilon to prevent rounding errors
+    return ship_v2 <= v_max * v_max; 
 }
 
 
