@@ -1,4 +1,4 @@
-//! O(logC/epsilon), very fast, but O(1) is possible.
+//! O(logC/epsilon), very fast, but O(1) is possible
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -44,7 +44,7 @@ int main() {
     while(right - left >= epsilon) {
         double mid = left + (right - left)/2;
         bool isPossible = satisfy(mid, v, t, vx, vy, wx, wy, x2, y2);
-        
+
         if(isPossible) {
             answer = mid;
             right = mid;
