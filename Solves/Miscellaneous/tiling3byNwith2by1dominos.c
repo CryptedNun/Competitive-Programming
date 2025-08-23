@@ -1,4 +1,4 @@
-// ! Topic: Recursive counting with DP
+// ! Topic: Recursive counting with 1D array DP approach
 
 #include <stdio.h>
 
