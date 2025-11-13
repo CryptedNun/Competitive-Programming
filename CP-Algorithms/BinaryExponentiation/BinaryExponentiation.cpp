@@ -1,17 +1,17 @@
 #include <bits/stdc++.h>
 using namespace std;
-long long binexp(int base, int power);
+long long binexp(long long base, long long power);
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
     int m,n; cin>>m>>n;
-    cout<<binexp(2, 7);
+    cout<<binexp(2, 31) - 1;
 }
 
 // * Binary Exponentiation: Time Complexity = O(log(n)), where n is the power.
-long long binexp(int base, int power) {
+long long binexp(long long base, long long power) {
     long long result = 1;
     while(power > 0) {
         if(power&1) result = result * base;

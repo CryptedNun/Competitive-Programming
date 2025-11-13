@@ -10,7 +10,7 @@ int main() {
     cout<<binexpmod(m, n, o);
 }
 
-long long binexpmod(int base, int power, int mod) {
+long long binexpmod(long long base, long long power, long long mod) {
     base %= mod;
     long long result = 1;
     while(power > 0) {

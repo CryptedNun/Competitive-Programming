@@ -39,8 +39,8 @@ int main() {
 
         for(int i=0; i<n; i++) {
             arr[i] = i+1;
-            if(i < n/2) perm[i] = (2*i + 1) - 1;    // ! -1 at end for 0-based indexing
-            else perm[i] = 2*(i - n/2 + 1) - 1;     // ! -1 at end for 0-based indexing
+            if(i < n/2) perm[i] = (2*i + 1) - 1;    // ! -1 offset for 0-based indexing
+            else perm[i] = 2*(i - n/2 + 1) - 1;     // ! -1 offset for 0-based indexing
         }
 
         vector<int> result = repeatedPermute(arr, perm, k);
