@@ -1,5 +1,3 @@
-// ! ami ekta kanadocha
-
 #include <bits/stdc++.h>
 using namespace std;
 
