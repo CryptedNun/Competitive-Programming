@@ -1,4 +1,4 @@
-// * O(nlogn); but there is a trivial O(n) approach, and a naive O(n^2) and a sh*tty O(n^3) approach
+// * O(nlogn);
 
 #include <bits/stdc++.h>
 using namespace std;

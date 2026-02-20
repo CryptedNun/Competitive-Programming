@@ -1,5 +1,5 @@
 // * Time Complexity to get all primTriples and multTriples: O(nlogn);
-// * O(n) may be possible if we use sieving techniques to get co-prime pairs {List all m,r that gcd(m,r) == 1}, but I'm not sure and I don't think that's necessary, since nlogn is still pretty fast.
+// * O(n) may be possible if we use sieving techniques to get co-prime pairs {List all m,r that gcd(m,r) == 1}
 
 #include <bits/stdc++.h>
 using namespace std;
