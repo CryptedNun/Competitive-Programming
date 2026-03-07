@@ -20,14 +20,14 @@ public:
     // Update the tree when an array index is updated.
     // pass delta = final - initial, when updating pre-existing arr. (This is why abelian/reversible groups are required)
     void update(int i, long long val) {
-        for (; i <= n; i += ( i & (~i + 1) ) )  // One based indices
+        for (; i <= n; i += ( i & -i ) )  // One based indices
             tree[i] += val;
     }
 
     // Get the sum of the range [1, i] through the BIT
     long long query(int i) {
         long long sum = 0;
-        for (; i > 0; i -= ( i & (~i + 1) ) ) 
+        for (; i > 0; i -= ( i & -i ) ) 
             sum += tree[i];
         return sum;
     }
