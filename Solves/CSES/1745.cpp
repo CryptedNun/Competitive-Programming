@@ -24,13 +24,13 @@ using namespace std;
 // }
 
 void solve() {
+    int n; cin >> n;
+    vector<int> x(n);
+    for(auto& e : x) cin >> e;
+
     // int n; cin >> n;
     // vector<int> x(n);
-    // for(auto& e : x) cin >> e;
-
-    int n = 100;
-    vector<int> x(n);
-    for(int i = 1; i <= n; i++) x[i - 1] = i;
+    // for(int i = 1; i <= n; i++) cin >> x[i - 1];
 
     vector<vector<int>> dp(n);
     dp[0].push_back(x[0]);
@@ -41,6 +41,7 @@ void solve() {
             dp[i].push_back(e + x[i]);
         }
 
+        // dp[i - 1].clear();
         sort(dp[i].begin(), dp[i].end());
         dp[i].erase(unique(dp[i].begin(), dp[i].end()), dp[i].end());
     }
