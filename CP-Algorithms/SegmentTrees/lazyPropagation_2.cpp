@@ -1,7 +1,10 @@
 // ? given an array and q many queries of t, l, r, x;
-// ? if t = 1, then set all elems within range of l,r to x
-// ? if t = 2 add x to all elems of range l,r
+// ? if t = 2, then set all elems within range of l,r to x
+// ? if t = 1 add x to all elems of range l,r
 // ? if t = 3, return the sum of [l,r], x won't be given.
+
+#include <bits/stdc++.h>
+using namespace std;
 
 struct Node {
     long long sum = 0;
@@ -40,6 +43,8 @@ class SegmentTree {
     }
 
     void push(int node, int start, int end) {
+        if(start == end) return; // Guardrail for not pushing on leafnodes
+
         int mid = start + (end - start)/2;
         if(tree[node].hasSet) {
             applySet(2 * node, start, mid, tree[node].lazySet);
@@ -75,8 +80,8 @@ class SegmentTree {
     }
 
     void update_range(int node, int start, int end) {
-        if(ql >= start && end <= qr) {
-            if(type == 1) applySet(node, start, end, value);
+        if(ql <= start && end <= qr) {
+            if(type == 2) applySet(node, start, end, value);
             else applyAdd(node, start, end, value);
             return;
         }
@@ -90,7 +95,7 @@ class SegmentTree {
     }
 
     long long query_rec(int node, int start, int end) {
-        if(ql >= start && end <= qr) {
+        if(ql <= start && end <= qr) {
             return tree[node].sum;
         }
         push(node, start, end);
@@ -125,12 +130,33 @@ public:
     }
 };
 
-#include <bits/stdc++.h>
-using namespace std;
+void solve() {
+    int n, q; cin >> n >> q;
+    vector<long long> t(n); for(auto&e:t) cin>>e;
+
+    SegmentTree st(t);
+    while(q--) {
+        int t, l, r, x;  cin >> t >> l >> r;
+        --l, --r;
+        if(t == 1) {
+            cin >> x;
+            st.update(1, l, r, x);
+        }
+        else if(t == 2) {
+            cin >> x;
+            st.update(2, l, r, x);
+        }
+        else {
+            cout << st.query(l, r) << endl;
+        }
+    }
+}
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    
+    solve();
+
+    return 0;
 }

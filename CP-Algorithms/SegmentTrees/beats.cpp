@@ -34,7 +34,7 @@ class SegmentTree {
 
     void update_rec(int node, int l, int r) {
         if(ql > r || qr < l || tree[node].max < x) return;
-        if(l == r && tree[node].sum >= x) {
+        if(l == r && tree[node].sum  >= x) {
             // Base case
             tree[node].max = tree[node].sum %= x;
             return;
