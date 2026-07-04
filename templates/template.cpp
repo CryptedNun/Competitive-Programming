@@ -1,5 +1,5 @@
 #pragma GCC optimize("Ofast,unroll-loops")
-#pragma GCC target("avx2,bmi,bmi2,lzcnt,popcnt")
+// #pragma GCC target("avx2,bmi,bmi2,lzcnt,popcnt")
 
 #include <bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp> 
@@ -31,6 +31,8 @@
 
 #define no cout << "NO" << '\n'
 #define yes cout << "YES" << '\n'
+#define INF 1e9
+#define NIL -1
 
 using namespace std;
 using namespace __gnu_pbds;
@@ -108,6 +110,11 @@ template<typename T>
 inline void setbit(T &x, int n) { x |= (static_cast<T>(1) << n); }
 template<typename T>
 inline void resetbit(T &x, int n) { x &= ~(static_cast<T>(1) << n); }
+
+// * __builtin_popcount()
+// * __builtin_clz()
+// * __builtin_ctz() 
+// * __builtin_ffs()
 // ? ----------------------------------------------------------------
 
 
@@ -376,6 +383,147 @@ vector<ll> multiply(vector<ll> const& a, vector<ll> const& b) {
 // ? -------------------------------------------------------------
 
 
+// ? DSU-------------------------------------------------------------
+struct DSU {
+    vector<int> parent;
+    vector<int> sz;
+    int components;
+
+    DSU(int n) {
+        parent.resize(n + 1);
+        sz.assign(n + 1, 1); // INIT: every component has 1 node
+        iota(parent.begin(), parent.end(), 0);
+        components = n;
+    }
+
+    int find(int i) {
+        if (parent[i] == i) return i;
+        return parent[i] = find(parent[i]);
+    }
+
+    void unite(int i, int j) {
+        int root_i = find(i);
+        int root_j = find(j);
+        if (root_i != root_j) {
+            if (sz[root_i] < sz[root_j]) swap(root_i, root_j);
+            
+            parent[root_j] = root_i;
+            sz[root_i] += sz[root_j]; // Increase size of the new root
+            components--;
+        }
+    }
+};
+// ? ---------------------------------------------------------------------
+
+
+// ? MST (KRUSKAL'S) ------------------------------------------------------------
+// Structure to represent a weighted edge
+struct Edge {
+    int u, v, weight;
+
+    // ! SORT USES DEFAULT <
+    bool operator<(const Edge& other) const {
+        return weight < other.weight;
+    }
+};
+
+/**
+ * Kruskal's Algorithm to find the MST
+ * @param n Number of vertices
+ * @param edges Vector of all edges in the graph
+ * @return A pair containing total MST weight and the list of edges in the MST
+ */
+pair<int, vector<Edge>> kruskalMST(int n, vector<Edge>& edges) {
+    // Sort all edges in non-decreasing order of their weight
+    sort(all(edges));
+
+    DSU dsu(n);
+    int mst_weight = 0;
+    vector<Edge> mst_edges;
+
+    // Iterate sorted edges
+    for (const auto& edge : edges) {
+        // If the endpoints are in different components, no cycle
+        if (dsu.find(edge.u) != dsu.find(edge.v)) {
+            dsu.unite(edge.u, edge.v);
+            mst_weight += edge.weight;
+            mst_edges.push_back(edge);
+        }
+        
+        if (mst_edges.size() == n - 1) break;
+    }
+
+    // !NOTE: If mst_edges.size() < n - 1, the graph was disconnected
+    return {mst_weight, mst_edges};
+}
+// ? -------------------------------------------------------------------------
+
+
+// ? MST (PRIM'S)----------------------------------------------------------------
+// const int INF = 1e9;
+// const int NIL = -1;
+using NodePair = pair<int, int>;
+
+/**
+ * Prim's Algorithm to find the MST (CLRS Variant using std::set)
+ * @param n Number of vertices
+ * @param adj Adjacency list where adj[u] contains pairs of {neighbor_node, edge_weight}
+ * @param r The root vertex to start the MST execution from
+ * @return A pair containing the total MST weight and the list of edges in the MST as {u, v, weight}
+ */
+pair<int, vector<vector<int>>> primMST(int n, const vector<vector<NodePair>>& adj, int r) {
+    int mst_weight = 0;
+    vector<vector<int>> mst_edges; // ! STORE AS {u, v, weight}
+
+    // Init keys to INF and π to NIL.
+    vector<int> key(n + 1, INF);
+    vector<int> pi(n + 1, NIL);
+    
+    // r.key = 0
+    key[r] = 0;
+
+    // Q = G.V
+    // Set to represent Q. Stores pairs of {key_value, node_id}
+    // *set.begin() returns element with smallest key_value. Easy to use DECREASE_KEY() by deletion and insertion.
+    set<pair<int, int>> Q;
+    
+    for (int i = 1; i <= n; ++i) Q.insert({key[i], i});
+
+    // while Q ≠ ∅
+    while (!Q.empty()) {
+        // u = EXTRACT-MIN(Q)
+        // *Q.begin() gets smallest key_value element.
+        auto [current_key, u] = *Q.begin();
+        Q.erase(Q.begin()); // Remove
+
+        // ! EXCEPT THE SRC NODE
+        // * pi[u] -> u, officially in the MST
+        if (pi[u] != NIL) {
+            mst_weight += current_key;
+            mst_edges.push_back({pi[u], u, current_key});
+        }
+
+        // for each v ∈ G.Adj[u]
+        for (const auto& [v, weight_u_v] : adj[u]) {
+            if (weight_u_v < key[v] && Q.find({key[v], v}) != Q.end()) {
+                // If v is still in Q, update.
+                auto it = Q.find({key[v], v});
+                Q.erase(it); // Erase the old pair
+                // v.π = u
+                pi[v] = u;
+                // v.key = w(u,v)
+                key[v] = weight_u_v;
+                
+                Q.insert({key[v], v}); // Insert updated pair
+            }
+        }
+    }
+
+    return {mst_weight, mst_edges};
+}
+// ?--------------------------------------------------------------------------------
+
+
 
 void solve() {
 
@@ -385,6 +533,7 @@ void solve() {
 
 int main() {
     fastIO();
+
     int t = 1; 
     cin >> t;
     while(t--) solve();
