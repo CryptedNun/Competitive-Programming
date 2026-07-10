@@ -524,6 +524,74 @@ pair<int, vector<vector<int>>> primMST(int n, const vector<vector<NodePair>>& ad
 // ?--------------------------------------------------------------------------------
 
 
+// ? Dijkstra's SSSP Algorithm----------------------------------------
+// adj[u] = list of pairs (v, weight)
+vector<int> dijkstra(int V, const vector<vector<pair<int, int>>>& adj, int src) {
+    vector<int> dist(V, INT_MAX);
+    // Min-heap stores pairs of (distance, vertex)
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+
+    dist[src] = 0;
+    pq.push({dist[src], src});
+
+    while (!pq.empty()) {
+        int d = pq.top().first;
+        int u = pq.top().second;
+        pq.pop();
+
+        // If shorter u path found, skip old entry
+        if (d > dist[u]) continue;
+
+        for (const auto& edge : adj[u]) {
+            int v = edge.first;
+            int weight = edge.second;
+
+            if (dist[u] != INT_MAX && dist[u] + weight < dist[v]) {    // u.d + w < v.d
+                dist[v] = dist[u] + weight;
+                pq.push({dist[v], v});
+            }
+        }
+    }
+    return dist; // Returns shortest distances from src to all vertices
+}
+// ?------------------------------------------------------------------
+
+
+// ? Bellman-Ford's SSSP Algorithm--------------------------------------
+struct Edge {
+    int u, v, weight;
+};
+
+// Returns distances, or an empty vector if a negative cycle is detected
+vector<int> bellmanFord(int V, const vector<Edge>& edges, int src) {
+    vector<int> dist(V, INT_MAX);
+    dist[src] = 0;
+
+    // Relax all edges V - 1 times
+    for (int i = 0; i < V - 1; ++i) {
+        for (const auto& edge : edges) {
+            if (dist[edge.u] != INT_MAX && dist[edge.u] + edge.weight < dist[edge.v]) {
+                dist[edge.v] = dist[edge.u] + edge.weight;
+            }
+        }
+    }
+
+    // Check for negative-weight cycles
+    for (const auto& edge : edges) {
+        if (dist[edge.u] != INT_MAX && dist[edge.u] + edge.weight < dist[edge.v]) {
+            // Negative cycle detected!
+            return {}; 
+        }
+    }
+
+    return dist;
+}
+// ?------------------------------------------------------------------
+
+
+// ? SSSP for DAG with TopoSort-----------------
+
+// ? -------------------------------------------
 
 void solve() {
 
@@ -535,7 +603,7 @@ int main() {
     fastIO();
 
     int t = 1; 
-    cin >> t;
+    // cin >> t;
     while(t--) solve();
     
     return 0;
