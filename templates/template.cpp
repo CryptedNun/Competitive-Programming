@@ -526,9 +526,10 @@ pair<int, vector<vector<int>>> primMST(int n, const vector<vector<NodePair>>& ad
 
 // ? Dijkstra's SSSP Algorithm----------------------------------------
 // adj[u] = list of pairs (v, weight)
-vector<int> dijkstra(int V, const vector<vector<pair<int, int>>>& adj, int src) {
+pair<vector<int>, vector<int>> dijkstra(int V, const vector<vector<pair<int, int>>>& adj, int src) {
     vector<int> dist(V, INT_MAX);
-    // Min-heap stores pairs of (distance, vertex)
+    vector<int> pi(V, -1);
+    // Min-heap stores pairs of (dist, v)
     priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
 
     dist[src] = 0;
@@ -548,11 +549,12 @@ vector<int> dijkstra(int V, const vector<vector<pair<int, int>>>& adj, int src) 
 
             if (dist[u] != INT_MAX && dist[u] + weight < dist[v]) {    // u.d + w < v.d
                 dist[v] = dist[u] + weight;
+                pi[v] = u;
                 pq.push({dist[v], v});
             }
         }
     }
-    return dist; // Returns shortest distances from src to all vertices
+    return {pi, dist}; // Returns: (PI, DIST)
 }
 // ?------------------------------------------------------------------
 
@@ -590,7 +592,58 @@ vector<int> bellmanFord(int V, const vector<Edge>& edges, int src) {
 
 
 // ? SSSP for DAG with TopoSort-----------------
+// adj[u] = list of pairs (v, weight)
+vector<int> KahnsDAGSSSP(int V, const vector<vector<pair<int, int>>>& adj, int src) {
+    // Step 1: Calculate in-degrees for all vertices
+    vector<int> inDegree(V, 0);
+    for (int u = 0; u < V; ++u) {
+        for (const auto& edge : adj[u]) {
+            int v = edge.first;
+            inDegree[v]++;
+        }
+    }
 
+    // Step 2: Initialize queue with all vertices having in-degree 0
+    queue<int> q;
+    for (int i = 0; i < V; ++i) {
+        if (inDegree[i] == 0) {
+            q.push(i);
+        }
+    }
+
+    // Step 3: Initialize distances
+    vector<int> dist(V, INT_MAX);
+    dist[src] = 0;
+
+    // Step 4: Process vertices in topological order 
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+
+        // If vertex is reachable from our source, relax 
+        if (dist[u] != INT_MAX) {
+            for (const auto& edge : adj[u]) {
+                int v = edge.first;
+                int weight = edge.second;
+
+                if (dist[u] + weight < dist[v]) {
+                    dist[v] = dist[u] + weight;
+                }
+            }
+        }
+
+        // Reduce in-deg of adjs and push to queue if 0
+        for (const auto& edge : adj[u]) {
+            int v = edge.first;
+            inDegree[v]--;
+            if (inDegree[v] == 0) {
+                q.push(v);
+            }
+        }
+    }
+
+    return dist;
+}
 // ? -------------------------------------------
 
 void solve() {
